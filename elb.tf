@@ -46,3 +46,11 @@ resource "aws_elb" "master" {
 
   instances = ["${aws_instance.minion.*.id}"]
 }
+
+output "minions_elb_dns_name" {
+  value = "${aws_elb.master.dns_name}"
+}
+
+output "minions_elb_zone_id" {
+  value = "${aws_elb.master.zone_id}"
+}

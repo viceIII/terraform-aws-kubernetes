@@ -28,7 +28,7 @@ resource "aws_instance" "master" {
 
   subnet_id              = "${element(var.vpc_subnet_ids_list, count.index % length(data.aws_availability_zones.available.names))}"
   availability_zone      = "${element(data.aws_availability_zones.available.names, count.index % length(data.aws_availability_zones.available.names))}"
-  vpc_security_group_ids = ["${aws_security_group.masters.id}"]
+  vpc_security_group_ids = ["${aws_security_group.masters.id}", "${compact(var.instance_security_groups)}", "${compact(var.master_instance_security_groups)}"]
 
   ephemeral_block_device {
     device_name  = "/dev/xvdb"
@@ -80,7 +80,7 @@ resource "aws_instance" "minion" {
 
   subnet_id              = "${element(var.vpc_subnet_ids_list, count.index % length(data.aws_availability_zones.available.names))}"
   availability_zone      = "${element(data.aws_availability_zones.available.names, count.index % length(data.aws_availability_zones.available.names))}"
-  vpc_security_group_ids = ["${aws_security_group.minions.id}"]
+  vpc_security_group_ids = ["${aws_security_group.minions.id}", "${compact(var.instance_security_groups)}", "${compact(var.minion_instance_security_groups)}", "${aws_security_group.master-elb.id}"]
 
   user_data = "${var.minion_user_data}"
 

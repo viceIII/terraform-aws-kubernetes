@@ -74,6 +74,18 @@ variable num_minions {
   default = 3
 }
 
+variable instance_security_groups {
+  default = []
+}
+
+variable master_instance_security_groups {
+  default = []
+}
+
+variable minion_instance_security_groups {
+  default = []
+}
+
 variable enable_extra_minion_security_group {
   default = false
 }
