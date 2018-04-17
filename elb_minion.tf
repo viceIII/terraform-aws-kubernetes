@@ -1,13 +1,8 @@
-data "aws_acm_certificate" "root_cert" {
-  domain   = "${var.root_domain}"
-  statuses = ["ISSUED"]
-}
-
 // ELB for the k8s API
-resource "aws_elb" "master" {
-  name            = "${var.elb_name}"
+resource "aws_elb" "minion" {
+  name            = "${var.elb_name}-minion"
   subnets         = ["${var.vpc_subnet_ids_list}"]
-  security_groups = ["${aws_security_group.master-elb.id}"]
+  security_groups = ["${aws_security_group.minion-elb.id}"]
 
   tags {
     KubernetesCluster = "${var.cluster_name}"

@@ -6,6 +6,16 @@ variable vpc_cidr_block {
   default = "172.20.0.0/16"
 }
 
+variable minion_security_groups {
+  type    = "list"
+  default = []
+}
+
+variable master_security_groups {
+  type    = "list"
+  default = []
+}
+
 variable root_domain {}
 
 variable root_volume_size {
