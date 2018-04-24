@@ -6,6 +6,10 @@ variable vpc_cidr_block {
   default = "172.20.0.0/16"
 }
 
+variable minion_tcp_elb_enabled {
+  default = false
+}
+
 variable minion_security_groups {
   type    = "list"
   default = []
