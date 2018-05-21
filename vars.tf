@@ -6,6 +6,10 @@ variable vpc_cidr_block {
   default = "172.20.0.0/16"
 }
 
+variable minion_associate_public_ip_address {
+  default = true
+}
+
 variable minion_tcp_elb_enabled {
   default = false
 }

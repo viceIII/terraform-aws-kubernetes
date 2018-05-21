@@ -71,7 +71,7 @@ resource "aws_instance" "minion" {
     delete_on_termination = true
   }
 
-  associate_public_ip_address = true
+  associate_public_ip_address = "${var.minion_associate_public_ip_address}"
 
   // Allows the VM to masquerade IPs (for pods). Otherwise, the
   // AWS runtime restricts the VM traffic to only appear as its
@@ -81,8 +81,7 @@ resource "aws_instance" "minion" {
   subnet_id              = "${element(var.vpc_subnet_ids_list, count.index % length(data.aws_availability_zones.available.names))}"
   availability_zone      = "${element(data.aws_availability_zones.available.names, count.index % length(data.aws_availability_zones.available.names))}"
   vpc_security_group_ids = ["${concat(list(aws_security_group.minions.id, aws_security_group.minion-elb.id), var.minion_security_groups)}"]
-
-  user_data = "${var.minion_user_data}"
+  user_data              = "${var.minion_user_data}"
 
   ephemeral_block_device {
     device_name  = "/dev/xvdb"
@@ -172,6 +171,17 @@ resource "aws_iam_role_policy" "minion" {
       "Effect": "Allow",
       "Action": "ec2:DetachVolume",
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+          "autoscaling:DescribeAutoScalingGroups",
+          "autoscaling:DescribeAutoScalingInstances",
+          "autoscaling:DescribeTags",
+          "autoscaling:SetDesiredCapacity",
+          "autoscaling:TerminateInstanceInAutoScalingGroup"
+      ],
+      "Resource": "*"
     }
   ]
 }
@@ -202,6 +212,17 @@ resource "aws_iam_role_policy" "master" {
       "Resource": [
         "arn:aws:s3:::kubernetes-*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+          "autoscaling:DescribeAutoScalingGroups",
+          "autoscaling:DescribeAutoScalingInstances",
+          "autoscaling:DescribeTags",
+          "autoscaling:SetDesiredCapacity",
+          "autoscaling:TerminateInstanceInAutoScalingGroup"
+      ],
+      "Resource": "*"
     }
   ]
 }

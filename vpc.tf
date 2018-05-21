@@ -6,6 +6,7 @@ resource "aws_vpc_dhcp_options" "main" {
 
   tags {
     Name              = "kubernetes-dhcp-option-set"
+    CreatedBy         = "terraform"
     KubernetesCluster = "${var.cluster_name}"
   }
 }
